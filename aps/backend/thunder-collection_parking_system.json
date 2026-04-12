@@ -1,0 +1,167 @@
+{
+    "clientName": "Thunder Client",
+    "collectionName": "Parking System API",
+    "collectionId": "parking-system-api-001",
+    "dateExported": "2026-02-08T16:28:00.000Z",
+    "version": "1.2",
+    "folders": [
+        {
+            "_id": "folder_auth",
+            "name": "Auth",
+            "containerId": ""
+        },
+        {
+            "_id": "folder_search",
+            "name": "Search & Hierarchy",
+            "containerId": ""
+        },
+        {
+            "_id": "folder_booking",
+            "name": "Booking flow",
+            "containerId": ""
+        },
+        {
+            "_id": "folder_admin",
+            "name": "Admin Management",
+            "containerId": ""
+        }
+    ],
+    "requests": [
+        {
+            "_id": "req_register",
+            "name": "1. User Register",
+            "url": "http://localhost:5000/api/auth/register",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2026-02-08T16:28:00.000Z",
+            "modified": "2026-02-08T16:28:00.000Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\": \"testuser@example.com\",\n  \"password\": \"Password@123\",\n  \"first_name\": \"Test\",\n  \"last_name\": \"User\",\n  \"phone\": \"1234567890\"\n}",
+                "form": []
+            },
+            "containerId": "folder_auth"
+        },
+        {
+            "_id": "req_login",
+            "name": "2. User Login",
+            "url": "http://localhost:5000/api/auth/login",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2026-02-08T16:28:00.000Z",
+            "modified": "2026-02-08T16:28:00.000Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\": \"testuser@example.com\",\n  \"password\": \"Password@123\"\n}",
+                "form": []
+            },
+            "containerId": "folder_auth",
+            "tests": [
+                {
+                    "type": "json-query",
+                    "custom": "json.access_token",
+                    "action": "set-env-var",
+                    "value": "access_token"
+                }
+            ]
+        },
+        {
+            "_id": "req_get_cities",
+            "name": "3. Search Cities",
+            "url": "http://localhost:5000/api/search/cities",
+            "method": "GET",
+            "sortNum": 30000,
+            "headers": [],
+            "containerId": "folder_search"
+        },
+        {
+            "_id": "req_get_areas",
+            "name": "4. Search Areas (City ID: 1)",
+            "url": "http://localhost:5000/api/search/cities/1/areas",
+            "method": "GET",
+            "sortNum": 40000,
+            "headers": [],
+            "containerId": "folder_search"
+        },
+        {
+            "_id": "req_get_facilities",
+            "name": "5. Search Facilities (Area ID: 1)",
+            "url": "http://localhost:5000/api/search/areas/1/facilities",
+            "method": "GET",
+            "sortNum": 50000,
+            "headers": [],
+            "containerId": "folder_search"
+        },
+        {
+            "_id": "req_get_floors",
+            "name": "6. Search Floors (Facility ID: 1)",
+            "url": "http://localhost:5000/api/search/facilities/1/floors",
+            "method": "GET",
+            "sortNum": 60000,
+            "headers": [],
+            "containerId": "folder_search"
+        },
+        {
+            "_id": "req_get_slots",
+            "name": "7. Search Slots (Floor ID: 1)",
+            "url": "http://localhost:5000/api/search/floors/1/slots?status=available",
+            "method": "GET",
+            "sortNum": 70000,
+            "headers": [],
+            "containerId": "folder_search"
+        },
+        {
+            "_id": "req_create_booking",
+            "name": "8. Book Slot",
+            "url": "http://localhost:5000/api/booking/book",
+            "method": "POST",
+            "sortNum": 80000,
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "value": "Bearer {{access_token}}"
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"slot_id\": 1,\n  \"vehicle_number\": \"ABC-1234\"\n}",
+                "form": []
+            },
+            "containerId": "folder_booking"
+        },
+        {
+            "_id": "req_end_booking",
+            "name": "9. End Booking (Booking ID: 1)",
+            "url": "http://localhost:5000/api/booking/1/end",
+            "method": "POST",
+            "sortNum": 90000,
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "value": "Bearer {{access_token}}"
+                }
+            ],
+            "containerId": "folder_booking"
+        },
+        {
+            "_id": "req_admin_login",
+            "name": "Admin Login",
+            "url": "http://localhost:5000/api/auth/login",
+            "method": "POST",
+            "sortNum": 100000,
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\": \"admin@parking.com\",\n  \"password\": \"Admin@123\"\n}",
+                "form": []
+            },
+            "containerId": "folder_admin"
+        }
+    ],
+    "settings": {
+        "options": {
+            "baseUrl": "http://localhost:5000"
+        }
+    }
+}
