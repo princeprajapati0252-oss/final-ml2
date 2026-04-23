@@ -63,16 +63,22 @@ def login():
         return jsonify({'error': 'Email and password required'}), 400
     
     user = User.query.filter_by(email=data['email']).first()
-    
-    if not user or not user.is_active:
+
+    if not user:
         return jsonify({'error': 'Invalid credentials'}), 401
-    
+
+    # Verify password first — before checking active status
     try:
-        if not bcrypt.checkpw(data['password'].encode('utf-8'), user.password_hash.encode('utf-8')):
-            return jsonify({'error': 'Invalid credentials'}), 401
+        password_valid = bcrypt.checkpw(data['password'].encode('utf-8'), user.password_hash.encode('utf-8'))
     except ValueError:
-        # Invalid hash format in database
+        password_valid = False
+
+    if not password_valid:
         return jsonify({'error': 'Invalid credentials'}), 401
+
+    # Password is correct — now check if account is active
+    if not user.is_active:
+        return jsonify({'error': 'Your account has been deactivated by the administrator.'}), 403
     
     access_token = create_access_token(identity=str(user.id))
     

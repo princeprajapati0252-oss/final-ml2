@@ -6,38 +6,40 @@ import { motion } from 'framer-motion';
 
 const Register = () => {
     const [formData, setFormData] = useState({
-        email: '',
-        password: '',
-        first_name: '',
-        last_name: '',
-        phone: '',
         role: 'end_user'
     });
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [formKey, setFormKey] = useState(0);
 
     const { register } = useAuth();
     const navigate = useNavigate();
 
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
-    };
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
         setLoading(true);
 
-        const result = await register(formData);
+        const form = new FormData(e.target);
+        const submitData = {
+            email: form.get('email'),
+            password: form.get('password'),
+            first_name: form.get('first_name'),
+            last_name: form.get('last_name'),
+            phone: form.get('phone'),
+            role: formData.role
+        };
+
+        const result = await register(submitData);
         if (result.success) {
             setSuccess(true);
             setTimeout(() => navigate('/login'), 2000);
         } else {
             setError(result.error);
+            setFormKey(prev => prev + 1);
         }
         setLoading(false);
     };
@@ -99,7 +101,7 @@ const Register = () => {
                     </div>
                 )}
 
-                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
+                <form key={formKey} onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
                     {/* Role Selection */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', marginBottom: '0.5rem' }}>
                         <label style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Register as</label>
@@ -151,8 +153,6 @@ const Register = () => {
                                 <input
                                     name="first_name"
                                     required
-                                    value={formData.first_name}
-                                    onChange={handleChange}
                                     style={{
                                         width: '100%',
                                         padding: '0.65rem 1rem 0.65rem 2.2rem',
@@ -170,8 +170,6 @@ const Register = () => {
                             <input
                                 name="last_name"
                                 required
-                                value={formData.last_name}
-                                onChange={handleChange}
                                 style={{
                                     width: '100%',
                                     padding: '0.65rem 1rem',
@@ -192,9 +190,8 @@ const Register = () => {
                             <input
                                 type="email"
                                 name="email"
+                                autoComplete="email"
                                 required
-                                value={formData.email}
-                                onChange={handleChange}
                                 style={{
                                     width: '100%',
                                     padding: '0.65rem 1rem 0.65rem 2.2rem',
@@ -215,8 +212,7 @@ const Register = () => {
                             <input
                                 type="tel"
                                 name="phone"
-                                value={formData.phone}
-                                onChange={handleChange}
+                                autoComplete="tel"
                                 style={{
                                     width: '100%',
                                     padding: '0.65rem 1rem 0.65rem 2.2rem',
@@ -237,9 +233,8 @@ const Register = () => {
                             <input
                                 type="password"
                                 name="password"
+                                autoComplete="new-password"
                                 required
-                                value={formData.password}
-                                onChange={handleChange}
                                 placeholder="••••••••"
                                 style={{
                                     width: '100%',

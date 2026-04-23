@@ -27,7 +27,9 @@ function AppContent() {
           {/* User Routes */}
           <Route path="/" element={
             <ProtectedRoute>
-              {isAdmin ? <Navigate to="/admin" /> : <UserDashboard />}
+              {user?.role === 'super_admin' ? <Navigate to="/super-admin" /> : 
+               user?.role === 'admin' ? <Navigate to="/admin" /> : 
+               <UserDashboard />}
             </ProtectedRoute>
           } />
 

@@ -32,7 +32,7 @@ def super_admin_required(f):
 
 # ======== Cities ========
 @parking_bp.route('/cities', methods=['POST'])
-@super_admin_required
+@admin_required
 def create_city():
     data = request.get_json()
     if not data.get('name'):
@@ -46,7 +46,7 @@ def create_city():
 
 # ======== Areas ========
 @parking_bp.route('/cities/<int:city_id>/areas', methods=['POST'])
-@super_admin_required
+@admin_required
 def create_area(city_id):
     data = request.get_json()
     if not data.get('name'):
@@ -84,7 +84,13 @@ def create_facility():
 @admin_required
 def get_my_facilities():
     user_id = int(get_jwt_identity())
-    facilities = ParkingFacility.query.filter_by(owner_id=user_id).all()
+    user = User.query.get(user_id)
+
+    # Super admins see all facilities; regular admins see only their own
+    if user and user.role.value == 'super_admin':
+        facilities = ParkingFacility.query.all()
+    else:
+        facilities = ParkingFacility.query.filter_by(owner_id=user_id).all()
     
     result = []
     for facility in facilities:

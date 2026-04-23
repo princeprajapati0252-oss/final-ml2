@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Clock, Car, ShieldCheck, Download, Share2, X, CreditCard } from 'lucide-react';
+import { MapPin, Clock, Car, ShieldCheck, X, CreditCard } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 
 const BookingPass = ({ booking, invoice, onPay, onClose }) => {
@@ -184,15 +184,7 @@ const BookingPass = ({ booking, invoice, onPay, onClose }) => {
                             />
                         </div>
 
-                        {/* Actions */}
-                        <div style={{ display: 'flex', gap: '1rem' }}>
-                            <button className="button" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', padding: '0.75rem', borderRadius: '12px' }}>
-                                <Download size={18} /> Save
-                            </button>
-                            <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', padding: '0.75rem', borderRadius: '12px', background: 'var(--surface)', border: '1px solid var(--glass-border)', color: 'white', cursor: 'pointer' }}>
-                                <Share2 size={18} /> Share
-                            </button>
-                        </div>
+
                     </>
                 )}
             </div>
